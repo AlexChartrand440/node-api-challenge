@@ -12,3 +12,29 @@ I need this code, but don't know where, perhaps should make some middleware, don
 
 Go code!
 */
+const express = require('express');
+const app = express();
+
+const actionRouter = require('./actionRouter');
+const projectRouter = require('./projectRouter');
+
+var logger = function logger(req, res, next) {
+
+    var currentdate = new Date();
+  
+    console.log('Handling ' + req.method + ' request @ ' + req.url + ' [' + currentdate.getDay() + "/" + currentdate.getMonth() 
+    + "/" + currentdate.getFullYear() + " " 
+    + currentdate.getHours() + ":" 
+    + currentdate.getMinutes() + ":" + currentdate.getSeconds() + ']');
+  
+    next();
+  
+}
+
+app.use(express.json());
+app.use(logger);
+
+app.use('/actions/', actionRouter);
+app.use('/project/', projectRouter);
+
+app.listen(5000, '127.0.0.1', () => console.log('Server listening on port 5000.'));
